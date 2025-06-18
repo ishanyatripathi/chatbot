@@ -1,5 +1,3 @@
-# model_loader.py
-
 from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 
 def load_chatbot_model(model_name="google/flan-t5-base"):
