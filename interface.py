@@ -1,3 +1,5 @@
+# interface.py
+
 from model_loader import load_chatbot_model
 from chat_memory import ChatMemory
 
@@ -16,8 +18,8 @@ def main():
         prompt = memory.get_context_text() + f"User: {user_input}\nBot:"
         response = chatbot(prompt, max_new_tokens=100)[0]["generated_text"]
 
-        # Extract the new response (after the prompt)
-        bot_reply = response[len(prompt):].strip().split("\n")[0]
+        # ✅ FIXED: Correct indentation and reliable response extraction
+        bot_reply = response.strip().split("Bot:")[-1].strip().split("\n")[0]
 
         print(f"Bot: {bot_reply}")
         memory.add_exchange(user_input, bot_reply)
