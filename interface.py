@@ -1,5 +1,3 @@
-
-
 from model_loader import load_chatbot_model
 from chat_memory import ChatMemory
 
@@ -14,10 +12,15 @@ def main():
             print("Bot: Exiting chatbot. Goodbye!")
             break
 
-        # Add previous context to prompt
+        # Include previous history in the prompt
         prompt = memory.get_context_text() + f"User: {user_input}\nBot:"
         response = chatbot(prompt, max_new_tokens=100)[0]["generated_text"]
 
-        # Extract only the new bot reply
+        # Extract the new response (after the prompt)
         bot_reply = response[len(prompt):].strip().split("\n")[0]
-        print(f"Bot: {
+
+        print(f"Bot: {bot_reply}")
+        memory.add_exchange(user_input, bot_reply)
+
+if __name__ == "__main__":
+    main()
