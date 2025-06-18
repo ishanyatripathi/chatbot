@@ -1,9 +1,11 @@
-# interface.py
+
 
 from model_loader import load_chatbot_model
+from chat_memory import ChatMemory
 
 def main():
     chatbot = load_chatbot_model()
+    memory = ChatMemory(max_turns=5)
 
     print("🤖 Chatbot is ready! Type your question or /exit to quit.")
     while True:
@@ -12,10 +14,10 @@ def main():
             print("Bot: Exiting chatbot. Goodbye!")
             break
 
-        # Smart prompt to improve factual output
-        prompt = f"Answer this question correctly:\n{user_input}"
-        response = chatbot(prompt, max_new_tokens=100)[0]['generated_text']
-        print(f"Bot: {response}")
+        # Add previous context to prompt
+        prompt = memory.get_context_text() + f"User: {user_input}\nBot:"
+        response = chatbot(prompt, max_new_tokens=100)[0]["generated_text"]
 
-if __name__ == "__main__":
-    main()
+        # Extract only the new bot reply
+        bot_reply = response[len(prompt):].strip().split("\n")[0]
+        print(f"Bot: {
